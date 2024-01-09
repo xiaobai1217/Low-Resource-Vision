@@ -1,11 +1,6 @@
-@inproceedings{ZhangCVPR2022,
-title = {Audio-Adaptive Activity Recognition Across Video Domains},
-author = {Yunhua Zhang and Hazel Doughty and Ling Shao and Cees G M Snoek},
-year = {2022},
-date = {2022-06-02},
-urldate = {2022-06-01},
-booktitle = {CVPR},
-keywords = {},
-pubstate = {published},
-tppubtype = {inproceedings}
-}
+@article{zhang2024,
+  title={Low-Resource Vision Challenges for Foundation Models},
+  author={Zhang, Yunhua and Doughty, Hazel and Snoek, Cees GM},
+  journal={},
+  year={2024}
+}s

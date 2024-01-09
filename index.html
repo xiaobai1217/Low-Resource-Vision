@@ -145,17 +145,17 @@
 				<tr>
 					<td align=center width=200px>
 						<center>
-							<span style="font-size:24px"><a href="https://xiaobai1217.github.io">Yunhua Zhang<sup>1</a></span>
+							<span style="font-size:24px"><a href="https://xiaobai1217.github.io">Yunhua Zhang</a></span>
 						</center>
 					</td>
 					<td align=center width=200px>
 						<center>
-							<span style="font-size:24px"><a href="https://hazeldoughty.github.io/">Hazel Doughty<sup>1</a></span>
+							<span style="font-size:24px"><a href="https://hazeldoughty.github.io/">Hazel Doughty</a></span>
 						</center>
 					</td>
 					<td align=center width=200px>
 						<center>
-							<span style="font-size:24px"><a href="https://www.ceessnoek.info/">Cees G.M. Snoek<sup>1</a></span>
+							<span style="font-size:24px"><a href="https://www.ceessnoek.info/">Cees G.M. Snoek</a></span>
 						</center>
 					</td>
 				</tr>
@@ -165,7 +165,7 @@
 				<tr>
 					<td align=center width=300px>
 						<center>
-							<span style="font-size:24px"><sup>1</sup> <a href="https://ivi.fnwi.uva.nl/vislab/">VIS Lab</a>, University of Amsterdam</span>
+							<span style="font-size:24px"><a href="https://ivi.fnwi.uva.nl/vislab/">VIS Lab</a>, University of Amsterdam</span>
 						</center>
 					</td>
 
@@ -174,24 +174,19 @@
 			<p> </p>
 			<table align=center width=640px>
 				<tr>
-					<td align=center width=100px>
+					<td align=center width=200px>
 						<center>
 							<span style="font-size:24px"><a href=''>[Paper]</a></span>
 						</center>
 					</td>
-					<td align=center width=100px>
+					<td align=center width=200px>
 						<center>
 							<span style="font-size:24px"><a href='https://github.com/xiaobai1217/Low-Resource-Vision'>[Code]</a></span><br>
 						</center>
 					</td>
 					<td align=center width=220px>
 						<center>
-							<span style="font-size:24px"><a href=''>[Low-Resource Dataset]</a></span><br>
-						</center>
-					</td>
-					<td align=center width=150px>
-						<center>
-							<span style="font-size:24px"><a href=''>[Demo Video]</a></span><br>
+							<span style="font-size:24px"><a href=''>[Datasets]</a></span><br>
 						</center>
 					</td>
 				</tr>
@@ -207,14 +202,14 @@
   			  <tr>
  	              <td width=370px>
   					<center>
-  	                	<img src = "./resources/1st-figure.png" height="520px"></img>
+  	                	<img src = "./resources/1st-figure.png" height="300px"></img>
   	                	<br>
 					</center>
   	              </td> 
 		  		  <table align=center width=1100px>
 					<tr>
 		              <td align=center width=1100px>
-		              <span style="font-size:15px"><b>We recognize activities under domain shifts, caused by change of scenery, camera viewpoint or actor, with the aid of sound. </b></span>
+		              <span style="font-size:15px"><b>Figure 1. High-Resource vs Low-Resource Vision.</b></span>
 					  </td>
 					</tr>
 				  </table>
@@ -230,48 +225,27 @@
 		<center><h1>Abstract</h1></center>
 		<tr>
 			<td>
-				This paper strives for activity recognition under domain shift, for example caused by change of scenery or camera viewpoint. The leading approaches reduce the shift in activity appearance by adversarial training and self-supervised learning. Different from these vision-focused works we leverage activity sounds for domain adaptation as they have less variance across domains and can reliably indicate which activities are not happening. We propose an audio-adaptive encoder and associated learning methods that discriminatively adjust the visual feature representation as well as addressing shifts in the semantic distribution. To further eliminate domain-specific features and include domain-invariant activity sounds for recognition, an audio-infused recognizer is proposed,  which effectively models the cross-modal interaction across domains. We also introduce the new task of actor shift, with a corresponding audio-visual dataset, to challenge our method with situations where the activity appearance changes dramatically. Experiments on this dataset, EPIC-Kitchens and CharadesEgo show the effectiveness of our approach. For instance, we achieve a 5% absolute improvement over previous works in EPIC-Kitchens.
+				Low-resource settings are well-established in natural language processing, where many languages lack sufficient data for machine learning at scale. However, low-resource problems are under-explored in computer vision. In this paper, we strive to address this gap and explore the challenges of low-resource image tasks with vision foundation models. Thus, we first collect a benchmark of genuinely low-resource image data, covering historic maps, circuit diagrams, and mechanical drawings. These low-resource settings all share the three challenges of data scarcity, fine-grained differences, and the distribution shift from natural images to the specialized domain of interest. While existing foundation models have shown impressive generalizability, we find they cannot transfer well to our low-resource tasks. To begin to tackle the challenges of low-resource vision, we introduce one simple baseline per challenge. Specifically, we propose to i) enlarge the data space by generative models, ii) adopt the best sub-kernels to encode local regions for fine-grained difference discovery and iii) learn attention for specialized domains. Experiments on the three low-resource data sources in our benchmark demonstrate our proposals already provide a better baseline than common transfer learning, data augmentation, and fine-grained methods. This highlights the unique characteristics and challenges of low-resource vision for foundation models that warrant further investigation. 
 			</td>
 		</tr>
 	</table>
 	<br>
 
 
-	<center><h1>Method</h1></center>
-
-	<table align=center width=420px>
-		<center>
-			<tr>
-				<td>
-				</td>
-			</tr>
-		</center>
-	</table>
-
-	<table align=center width=850px>
-		<center>
-			<tr>
-				<td>
-					We train our audio-adaptive model in two stages using videos from source and target domains with accompanying audio. In the first stage we train our <b>audio-adaptive encoder</b> that uses audio to adapt a visual encoder to be more robust to distribution shifts. In the second stage, we train our <b>audio-infused recognizer</b> using pseudo-labels from the audio-adaptive encoder for the target domain and the ground-truth labels for the source domain. The audio-infused recognizer maps the source and target domains into a common space and fuses audio and visual features to produce an activity prediction for either domain
-
-				</td>
-			</tr>
-		</center>
-	</table>
-
+	<center><h1>Tasks</h1></center>
 
 	 <table align=center width=1100px>
   			  <tr>
  	              <td width=700px>
   					<center>
-  	                	<img src = "./resources/encoder.png" height="350px"></img>
+  	                	<img src = "./resources/tasks.png" height="500px"></img>
   	                	<br>
 					</center>
   	              </td> 
 		  		  <table align=center width=800px>
 					<tr>
 		              <td align=center width=600px>
-		              <span style="font-size:15px"><b>Audio-adaptive encoder for activity recognition under domain shift </b></span>
+		              <span style="font-size:15px"><b>Figure 2. Low-Resource Image Transfer Evaluation Benchmark.</b></span>
 					  </td>
 					</tr>
 				  </table>
@@ -279,33 +253,32 @@
                 </tr>
   		  </table>
 
-						
-
-
 	<table align=center width=850px>
 		<center>
 			<tr>
 				<td>
-					Our <b>audio-adaptive encoder</b> consists of a visual encoder, an audio encoder and an audio-based attention module. Since the sounds of activities have less variance across domains, the encoder aims to extract visual features that are invariant but discriminative under domain shift with the aid of the audio encoder pretrained for audio-based activity recognition. To this end, we train the visual encoder and the attention module with two audio-adaptive learning methods: absent-activity learning or unlabeled target data and audio-balanced learning for labeled source data. The former aims to remove irrelevant parts of the visual features while the latter helps to handle the differing label distribution between domains. Once trained, for each video, we can extract an audio feature vector from the audio encoder and a series of visual features from the visual encoder with which to train our audio-infused recognizer 
+					Our three benchmark tasks are: (a) classifying circuit diagrams with the correct function, (b) retrieving the modern satellite map given an old map of a city, and (c) retrieving the mechanical drawing corresponding to a 3D photo of a component and vice versa.
 
 				</td>
 			</tr>
 		</center>
 	</table>
 
+		<p> </p>
 
-		<table align=center width=1100px>
+
+	 <table align=center width=1100px>
   			  <tr>
- 	              <td width=370px>
+ 	              <td width=700px>
   					<center>
-  	                	<img src = "./resources/transformer.png" height="300px"></img>
+  	                	<img src = "./resources/datasets.png" height="100px"></img>
   	                	<br>
 					</center>
   	              </td> 
-		  		  <table align=center width=1100px>
+		  		  <table align=center width=800px>
 					<tr>
-		              <td align=center width=1100px>
-		              <span style="font-size:15px"><b>Audio-infused recognizer. </b></span>
+		              <td align=center width=600px>
+		              <span style="font-size:15px"><b>Table 1. Benchmark Statistics</b></span>
 					  </td>
 					</tr>
 				  </table>
@@ -314,65 +287,138 @@
   		  </table>
 
 
+	<center><h1>Low-Resource Vision Challenges</h1></center>
+
 	<table align=center width=850px>
 		<center>
 			<tr>
 				<td>
-					While audio can help focus on the activity-relevant visual features inside our audio-adaptive encoder, there is still a large difference between the appearance of activities in different domains. To further eliminate domain-specific visual features and fuse the activity cues from the audio and visual modalities, we propose the <b>audio-infused recognizer</b>. As shown in the above figure, we add domain embedding to encourage a common visual representation across domains. Then, an audio-adaptive class token is obtained from a series of activity sound feature vectors, considering both audio and visual features. It is sent into the transformer together with the visual features. By the transformer’s self attention, this token aggregates information from visual features with the domain-invariant audio activity cues for activity classification.
-
+					<b>Challenge I: Data Scarcity. </b>The data available for training models for low-resource scenarios is extremely limited. This is demonstrated through the small amount of data we were able to find online for each low-resource task (see Table 1).
+					<b>Challenge II: Fine-Grained. </b>Data that is low-resourceis also highly specialized, meaning differences between images are incredibly subtle and attention to fine-grained details is necessary to solve the task. For example, the component symbols are key to a circuit’s purpose, not its layout. Similarly, in mechanical drawings, the components may only vary in the number of holes.  <br>
+					<b>Challenge III:Specialized Domain. </b>Not only is the available data severely limited, but it has a significantly different appearance and comes from an entirely different domain to the natural images commonly used in vision tasks. This means it is both difficult to bootstrap the training data for low-resource tasks with existing datasets and models that are successful on natural images cannot be easily applied to the specialized domains of low-resource images. 
 				</td>
 			</tr>
 		</center>
 	</table>
 
+
+
+
 	<table align=center width=850px>
-		<center><h1>ActorShift Dataset</h1></center>
+		<center><h1>Baselines for the Low-Resource Challenges</h1></center>
 		<tr>
 			<td>
-				We introduce ActorShift, where the domain shift comes from the change in actor species: we use humans in the source domain and animals in the target domain. This causes large variances in the appearance and motion of activities. For the corresponding dataset we select 1,305 videos of 7 human activity classes from Kinetics-700 as the source domain: sleeping, watching tv, eating, drinking, swimming, running and opening a door. For the target domain we collect 200 videos from YouTube of animals performing the same activities. We divide them into 35 videos for training (5 per class) and 165 for evaluation. The target domain data is scarce, meaning there is the additional challenge of adapting to the target domain with few unlabeled examples.
+				Our goal is to adapt foundation models, pre-trained on large-scale datasets, to low-resource tasks. To better handle adaptation in low-resource vision, we introduce one baseline for each challenge. 
 			</td>
 		</tr>
 	</table>
 	<br>
 
-		 <table align=center width=1100px>
+	<table align=center width=850px>
+		<center><h2>Baseline I: Generated Data for Data Scarcity</h2></center>
+		<tr>
+			<td>
+				We augment images with generative models, obtaining images close to the input image where the label is preserved as well as more diverse images which break the label. We use label-preserving images in the task loss and augment the label-breaking images for use in a contrastive loss.
+			</td>
+		</tr>
+	</table>
+	<br>
+
+
+
+
+
+	 <table align=center width=1100px>
   			  <tr>
  	              <td width=700px>
   					<center>
-  	                	<img src = "./resources/actorshift.png" height="350px"></img>
+  	                	<img src = "./resources/baselineI.png" height="200px"></img>
   	                	<br>
 					</center>
   	              </td> 
 		  		  <table align=center width=800px>
 					<tr>
 		              <td align=center width=600px>
-		              <span style="font-size:15px"><b>Examples in our ActorShift dataset </b></span>
+		              <span style="font-size:15px"><b>Figure 3. Generated Data for Data Scarcity. </b></span>
 					  </td>
 					</tr>
 				  </table>
 				<br>
                 </tr>
   		  </table>
-  		  <br>
+
+
+	<table align=center width=850px>
+		<center><h2>Baseline II: Tokenization for Fine-Grained</h2></center>
+		<tr>
+			<td>
+				We divide the original linear projection of a pre-trained foundation model into sub-kernels. These sub-kernels can be applied to smaller areas of the image patch to attend to fine-grained details. We learn a weighting to combine the resulting features into patch-level features.
+			</td>
+		</tr>
+	</table>
+	<br>
+
+
+
+
 
 	 <table align=center width=1100px>
-	  		 	<center><h1>Demo Video</h1></center>
   			  <tr>
-<!--   	              <td width=400px>
+ 	              <td width=700px>
   					<center>
-  	                	<img class="rounded" src = "./index_files/teaser_v3.jpg" height="275px"></img>
+  	                	<img src = "./resources/baselineII.png" height="200px"></img>
   	                	<br>
 					</center>
-  	              </td> -->
+  	              </td> 
 		  		  <table align=center width=800px>
-		  		    <tr>
-		              <td align=center width=800px>
-						<iframe width="800" height="450" src="https://youtube.com/embed/Lh3gb6NMhB4" frameborder="0" allowfullscreen></iframe>
+					<tr>
+		              <td align=center width=600px>
+		              <span style="font-size:15px"><b>Figure 4. Tokenization for Fine-Grained. </b></span>
 					  </td>
+					</tr>
 				  </table>
 				<br>
                 </tr>
   		  </table>
+
+
+
+	<table align=center width=850px>
+		<center><h2>Baseline III: Attention for Specialized Domains</h2></center>
+		<tr>
+			<td>
+				We learn a set of global attention maps with common attention patterns particular to the specialized domain such as vertical and horizontal directions for circuit diagrams. For each token, we crop the corresponding region from the global attention map according to the location.
+			</td>
+		</tr>
+	</table>
+	<br>
+
+
+
+
+
+	 <table align=center width=1100px>
+  			  <tr>
+ 	              <td width=700px>
+  					<center>
+  	                	<img src = "./resources/baselineIII.png" height="200px"></img>
+  	                	<br>
+					</center>
+  	              </td> 
+		  		  <table align=center width=800px>
+					<tr>
+		              <td align=center width=600px>
+		              <span style="font-size:15px"><b>Figure 5. Attention for Specialized Domains. </b></span>
+					  </td>
+					</tr>
+				  </table>
+				<br>
+                </tr>
+  		  </table>
+
+
+
+
 
 
 	<br>
@@ -381,10 +427,9 @@
 		<center><h1>Paper and Supplementary Material</h1></center>
 		<tr>
 			<td><a href=""><img class="layered-paper-big" style="height:175px" src="./resources/paper.png"/></a></td>
-			<td><span style="font-size:14pt">Yunhua Zhang, Hazel Doughty, Ling Shao, Cees G.M. Snoek<br>
-				<b>Audio-Adaptive Activity Recognition Across Video Domains</b><br>
-				In CVPR, 2022.<br>
-				(hosted on <a href="https://arxiv.org/abs/2203.14240">ArXiv</a>)<br>
+			<td><span style="font-size:14pt">Yunhua Zhang, Hazel Doughty, Cees G.M. Snoek<br>
+				<b>Low-Resource Vision Challenges for Foundation Models.<br>
+				(hosted on <a href="">ArXiv</a>)<br>
 				<!-- (<a href="./resources/camera-ready.pdf">camera ready</a>)<br> -->
 				<span style="font-size:14pt"><a href="./resources/bibtex.txt">[Bibtex]<br></a>
 				</span>
