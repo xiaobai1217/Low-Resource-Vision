@@ -1,6 +1,6 @@
-@article{zhang2024,
+@inproceedings{zhang2024,
   title={Low-Resource Vision Challenges for Foundation Models},
   author={Zhang, Yunhua and Doughty, Hazel and Snoek, Cees GM},
-  journal={},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
   year={2024}
-}s
+}
