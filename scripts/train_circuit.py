@@ -1,0 +1,180 @@
+import pdb
+from dataloader_circuit import CircuitDataset
+import torch
+import argparse
+import tqdm
+import os
+import numpy as np
+import math
+import csv
+import collections
+import torch.nn as nn
+import random
+import warnings
+from torch.cuda.amp import autocast,GradScaler
+import torch.nn.functional as F
+import sys
+sys.path.append('/path-to/demo-code/')
+from imagebind.models import imagebind_model
+from imagebind.models.imagebind_model import ModalityType
+
+
+def train_one_step(imgs, labels, weights, aug_imgs, aug_imgs2, feature_bank):
+    outputs, _ = model(imgs)
+    loss = torch.sum(loss_fn(outputs, labels) * weights) / torch.sum(weights)
+
+    _, aug_features = model(aug_imgs)
+    aug_features = F.normalize(aug_features, dim=-1)
+    _, aug_features2 = model(aug_imgs2)
+    aug_features2 = F.normalize(aug_features2, dim=-1)
+
+    if len(feature_bank) > 0:
+        compared_features = torch.cat(feature_bank, dim=0)
+        compared_features = torch.cat((aug_features, compared_features), dim=0)
+        contrastive_logits = args.factor * aug_features2 @ compared_features.t()
+    else:
+        contrastive_logits = args.factor * aug_features2 @ aug_features.t()
+    contrastive_labels = torch.arange(aug_imgs.size()[0], device='cuda', dtype=torch.long)
+    contrastive_loss = F.cross_entropy(contrastive_logits, contrastive_labels)
+    # pdb.set_trace()
+    loss += contrastive_loss * args.lambda
+
+    optim.zero_grad()
+    optim.zero_grad()
+    scaler.scale(loss).backward()
+    scaler.step(optim)
+    scaler.update()
+
+    feature_bank.append(aug_features.detach())
+    if len(feature_bank) > args.bank_size:
+        feature_bank = feature_bank[-args.bank_size:]
+
+    return outputs, loss
+
+def val_one_step(imgs, labels):
+    with torch.no_grad():
+        outputs, _ = model(imgs)
+        loss = torch.mean(loss_fn(outputs, labels))
+
+    return outputs, loss
+
+if __name__ == '__main__':
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--lr', type=float, help='input a str', default=5e-4)
+    parser.add_argument('--save_id', type=int, help='input a str', default=1)
+    parser.add_argument('--resume', type=bool, help='input a str', default=False)
+    parser.add_argument('--resume_checkpoint', type=str, help='input a str', default='')
+    parser.add_argument('--batch_size', type=int, help='input a str', default=4)
+    parser.add_argument('--alpha', type=float, help='input a str', default=1.0)
+    parser.add_argument('--bank_size', type=int, help='input a str', default=40)
+    parser.add_argument('--aug_prob', type=float, help='input a str', default=0.3)
+    parser.add_argument('--aug_weight', type=float, help='input a str', default=0.65)
+    parser.add_argument('--factor', type=float, help='input a str', default=80.0)
+    parser.add_argument('--lambda', type=float, help='input a str', default=0.1)
+    parser.add_argument('--middle_dimension', type=int, help='input a str', default=2)
+    parser.add_argument('--att_num', type=int, help='input a str', default=10)
+    parser.add_argument('--att_layers', type=str, help='input a str', default='16')
+    parser.add_argument('--alpha', type=float, help='input a str', default=0.5)    
+    args = parser.parse_args()
+
+    np.random.seed(0)
+    torch.manual_seed(0)
+    random.seed(0)
+    warnings.filterwarnings("ignore")
+
+    # assign the desired device.
+    device = 'cuda' # or 'cpu'
+    device = torch.device(device)
+
+    base_path = "checkpoints/"
+    if not os.path.exists(base_path):
+        os.mkdir(base_path)
+
+    log_path = base_path + "log_%02d.csv"%args.save_id
+    cmd = ['rm -rf ', log_path]
+    os.system(' '.join(cmd))
+
+    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+
+    # Instantiate model
+    att_layers = args.att_layers.split(',')
+    att_layers = [int(num) for num in att_layers]
+    model = imagebind_model.imagebind_huge(pretrained=True, task_type='classification', middle_dimension=args.middle_dimension, att_num = args.att_num, att_layers = att_layers, alpha=args.alpha)    
+    model.to(device)
+    model = nn.DataParallel(model)
+
+    loss_fn = nn.CrossEntropyLoss()
+    trainable_parameters = []
+    trainable_parameters += [{'params': model.module.W_downs}]
+    trainable_parameters += [{'params': model.module.W_ups}]
+    trainable_parameters += [{'params': model.module.head.parameters()}]
+
+    optim = torch.optim.Adam(trainable_parameters, lr=args.lr, weight_decay=5e-7, betas=(0.95,0.999))
+
+    batch_size = args.batch_size
+    train_loader = torch.utils.data.DataLoader(CircuitDataset(split='train', aug_prob = args.aug_prob, aug_weight = args.aug_weight),batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True)
+    val_loader = torch.utils.data.DataLoader(CircuitDataset(split='val', ),batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True)
+
+    dataloaders = {'train': train_loader, 'val': val_loader}
+    BestLoss = float("inf")
+    BestEpoch = 0
+    BestAcc = 0
+    scaler = GradScaler()
+    feature_bank = []
+    with open(log_path, "a") as f:
+        for epoch_i in range(90):
+            print("Epoch: %02d" % epoch_i)
+            for split in ['train', 'val']:
+                acc = 0
+                count = 0
+                total_loss = 0
+                loss=0
+                print(split)
+                model.train(split == 'train')
+                with tqdm.tqdm(total=len(dataloaders[split])) as pbar:
+                    for i, (imgs, labels, weights, aug_imgs, aug_imgs2) in enumerate(dataloaders[split]):
+                        imgs = imgs.type(torch.FloatTensor).cuda()
+                        labels = labels.cuda()
+                        weights = weights.cuda()
+                        aug_imgs = aug_imgs.type(torch.FloatTensor).cuda()
+                        aug_imgs2 = aug_imgs2.type(torch.FloatTensor).cuda()
+
+                        if split=='train':
+                            outputs, loss = train_one_step(imgs, labels, weights, aug_imgs, aug_imgs2, feature_bank, alpha=args.alpha)
+                        else:
+                            outputs, loss = val_one_step(imgs, labels)
+
+                        total_loss += loss.item() * batch_size
+                        _, predict = torch.max(outputs.detach().cpu(), dim=1)
+                        acc1 = (predict == labels.cpu()).sum().item()
+                        acc += int(acc1)
+
+                        count += outputs.size()[0]
+                        pbar.set_postfix_str(
+                            "Average loss: {:.4f}, Current loss: {:.4f}, Accuracy: {:.4f}".format(
+                                total_loss / float(count),
+                                loss.item(), acc / float(count)))
+                        pbar.update()
+                    f.write("{},{},{},{},{},{}\n".format(epoch_i, split, total_loss / float(count), acc / float(count), BestEpoch, BestAcc))
+                    f.flush()
+
+            if acc/float(count) > BestAcc:
+                BestLoss = total_loss / float(count)
+                BestEpoch = epoch_i
+                BestAcc = acc / float(count)
+                save = {
+                    'epoch': epoch_i,
+                    'state_dict': model.state_dict(),
+                    'best_loss': BestLoss,
+                }
+
+                torch.save(save,
+                           base_path + "best%02d.pt"%args.save_id)
+
+        f.write("BestEpoch,{},BestLoss,{},BestACC,{}\n".format(BestEpoch, BestLoss, BestAcc))
+        f.flush()
+
+    f.close()
