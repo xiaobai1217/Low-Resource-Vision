@@ -2,6 +2,9 @@
 
 [Yunhua Zhang](https://xiaobai1217.github.io/), [Hazel Doughty](https://hazeldoughty.github.io/), [Cees G.M. Snoek](https://www.ceessnoek.info/)
 
+![Screenshot 2024-04-19 at 10 41 58](https://github.com/xiaobai1217/Low-Resource-Vision/assets/22721775/3676a97b-0052-40a5-8951-df442fcb6fe8)
+
+
 [Website](https://xiaobai1217.github.io/Low-Resource-Vision/) [Dataset](https://uvaauas.figshare.com/articles/dataset/Low-Resource_Image_Transfer_Evaluation_Benchmark/25577145)
 
 ## Zero-Shot Transfer Evaluation
