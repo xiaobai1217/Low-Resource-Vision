@@ -1,6 +1,6 @@
 # [Low-Resource Vision Challenges for Foundation Models](https://arxiv.org/pdf/2401.04716.pdf) (CVPR 2024)
 
-[Yunhua Zhang](https://xiaobai1217.github.io/), [Hazel Doughty](https://hazeldoughty.github.io/), [Cees G.M. Snoek](https://www.ceessnoek.info/)
+[Yunhua Zhang](https://xiaobai1217.github.io/),    [Hazel Doughty](https://hazeldoughty.github.io/),    [Cees G.M. Snoek](https://www.ceessnoek.info/)
 
 <img width="400" alt="Screenshot 2024-04-19 at 10 41 58" src="https://github.com/xiaobai1217/Low-Resource-Vision/assets/22721775/3676a97b-0052-40a5-8951-df442fcb6fe8">
 
